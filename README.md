@@ -1,7 +1,6 @@
 1.	Настроил виртуальную машину и sql
 
- ![alt text](https://github.com/Locruz22/SQL_GB/blob/Topic_1/9.png  | width=300)
- <img src="https://github.com/Locruz22/SQL_GB/blob/Topic_1/9.png" width="300">
+ <img src="https://github.com/Locruz22/SQL_GB/blob/Topic_1/9.png" width="600">
 
 *почему-то консольный клиент запускается только через sudo. Если написать просто mysql -u root -p, то выдает “В доступе отказано”.
 
