@@ -1,12 +1,11 @@
-
 # 1. Составьте список пользователей users, которые осущиствили хотя бы один заказ orders в интернет-магазине
 
 -- уже имеются таблицы orders, catalogs, users, products. Все таблицы кроме orders заполненны данными.
 
-SELECT * FROM orders;			# id, product_id, buyer_id, count
-SELECT * FROM catalogs;			# id, name, value
-SELECT * FROM users;  			# id, name, birthday
-SELECT * FROM products;			# id, name, product_id, total
+SELECT * FROM orders;     # id, product_id, buyer_id, count
+SELECT * FROM catalogs;     # id, name, value
+SELECT * FROM users;        # id, name, birthday
+SELECT * FROM products;     # id, name, product_id, total
 
 -- Заполним таблицу orders тестовыми данными
 
@@ -46,5 +45,3 @@ FROM catalogs AS catalogs
 JOIN
 products AS products
 ON catalogs.id = products.product_catalog_id;
-
-
