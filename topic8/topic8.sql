@@ -2,22 +2,34 @@
 
 
 SELECT * FROM profiles;
--- user_id, birthday
 SELECT * FROM likes;
--- id, target_id, taraget_type_id (2)
+     
+SELECT SUM(got_likes) AS total_likes_for_youngest
+  FROM (   
+    SELECT COUNT(DISTINCT likes.id) AS got_likes 
+      FROM profiles
+        LEFT JOIN likes
+          ON likes.target_id = profiles.user_id
+            AND target_type_id = 2
+      GROUP BY profiles.user_id
+      ORDER BY profiles.birthday DESC
+      LIMIT 10
+) AS youngest; 
 
-# Этот запрос выдает 10 ячеек (самых молодых пользователей) в которых находится определенное количество лайков,
-# но не понял как это все сложить в одну ячейку (SUM выдает что-то странное)
 
-SELECT profiles.user_id, profiles.birthday, COUNT(likes.target_id) AS user_likes
+SELECT 
+  COUNT(likes.id) AS users_likes,
+  profiles.birthday AS age,
+  profiles.user_id
   FROM likes
-    JOIN profiles
-      ON profiles.user_id = likes.target_id AND likes.target_type_id = 2
-      GROUP BY likes.target_id
-      ORDER BY profiles.birthday DESC LIMIT 10;
-
-
-
+    JOIN target_types
+      ON likes.target_type_id = target_types.id
+        AND target_types.name = 'users' 
+    RIGHT JOIN profiles
+      ON profiles.user_id = likes.target_id
+  GROUP BY profiles.user_id
+  ORDER BY age DESC
+  LIMIT 10;   
 
 # 2. Определить кто больше поставил лайков (всего) - мужчины или женщины?
     
@@ -39,9 +51,9 @@ SELECT * FROM friendship;
    
 SELECT 
   CONCAT(users.first_name, ' ', users.last_name) AS name, 
-  COUNT(posts.user_id) +
-  COUNT(media.user_id) +
-  COUNT(likes.user_id) AS activity
+  COUNT(DISTINCT posts.user_id) +
+  COUNT(DISTINCT media.user_id) +
+  COUNT(DISTINCT likes.user_id) AS activity
   FROM users
    LEFT JOIN posts
       ON posts.user_id = users.id
@@ -52,13 +64,8 @@ SELECT
   GROUP BY users.id
   ORDER BY activity
   LIMIT 10;
-   
-   
-   
-   
-   
-   
-   
+
+
    
    
    
