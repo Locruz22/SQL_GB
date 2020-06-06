@@ -66,21 +66,22 @@ CREATE INDEX profiles_country_city_user_id_idx FROM profiles;
 
 SELECT DISTINCT
   communities.name,
-  COUNT(communities_users.user_id) OVER () / 10 AS 'average_users',
-  MAX(profiles.birthday) OVER(PARTITION BY communities.name) AS 'youngest',
-  MIN(profiles.birthday) OVER(PARTITION BY communities.name) AS 'oldest',
-  COUNT(communities_users.user_id) OVER (PARTITION BY communities.name) AS 'amount_users',
+ COUNT(communities_users.community_id) OVER () / 10 AS 'average_users',
+  MAX(profiles.birthday) OVER w AS 'youngest',
+  MIN(profiles.birthday) OVER w AS 'oldest',
+  COUNT(communities_users.user_id) OVER w AS 'amount_users',
   COUNT(profiles.user_id) OVER() AS 'users_in_system',
-  COUNT(communities_users.user_id) OVER (PARTITION BY communities.name) / COUNT(profiles.user_id) OVER() AS '%%'
+  COUNT(communities_users.user_id) OVER  w / COUNT(profiles.user_id) OVER() AS '%%'
     FROM communities
       JOIN communities_users
         ON communities.id = communities_users.community_id
       RIGHT JOIN profiles
-        ON communities_users.user_id = profiles.user_id;
-
+        ON communities_users.user_id = profiles.user_id
+     WINDOW w AS (PARTITION BY communities.name ORDER BY communities.name);
        
 SELECT * FROM profiles;   
 SELECT * FROM communities_users;
 SELECT * FROM communities;
+
 
 
